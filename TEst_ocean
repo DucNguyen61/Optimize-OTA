@@ -1,0 +1,447 @@
+(procedure khoitao()
+
+	;; Configuration for simulator
+	simulator( 'spectre )
+	;; Configuration for netlist address
+	design(	 "/home/disk/simulation/SIM_IC61/THU_TWO_STAGE_OPAMP/spectre/schematic/netlist/netlist")
+	;; Configuration for results directory	
+	resultsDir( "/home/disk/simulation/SIM_IC61/THU_TWO_STAGE_OPAMP/spectre/schematic" )
+
+	modelFile( 
+	    '("/home/hoangtrang/Thu_vien_PDK/PDK_CRN65LP_v1.7a_Official_IC61_20120914_all/		PDK_CRN65LP_v1.7a_Official_IC61_20120914/tsmcN65/../models/spectre/toplevel.scs" "tt_lib")
+	)
+
+	fin =infile("./PSO_para.txt")
+	fscanf(fin "\n%s" Wa_1_var	)
+	fscanf(fin "\n%s" Wa_2_var	)
+	fscanf(fin "\n%s" Wa_3_var	)
+	fscanf(fin "\n%s" Wa_4_var	)
+	fscanf(fin "\n%s" Wa_5_var	)
+	fscanf(fin "\n%s" Wa_6_var	)
+	fscanf(fin "\n%s" Wa_7_var	)
+	fscanf(fin "\n%s" Wa_8_var	)
+	fscanf(fin "\n%s" Wa_9_var	)
+	fscanf(fin "\n%s" Wa_10_var	)
+	fscanf(fin "\n%s" Wa_11_var	)
+	fscanf(fin "\n%s" Wa_12_var	)
+	fscanf(fin "\n%s" Wa_13_var	)
+	fscanf(fin "\n%s" Wa_14_var	)
+	fscanf(fin "\n%s" Wa_15_var	)
+	fscanf(fin "\n%s" Wa_16_var	)
+	fscanf(fin "\n%s" Wa_17_var	)
+	fscanf(fin "\n%s" Wa_18_var	)
+	fscanf(fin "\n%s" Wa_19_var	)
+	fscanf(fin "\n%s" Wa_20_var	)
+	fscanf(fin "\n%s" Wb_1_var	)
+	fscanf(fin "\n%s" Wb_2_var	)
+	fscanf(fin "\n%s" Wb_3_var	)
+	fscanf(fin "\n%s" Wb_4_var	)
+	fscanf(fin "\n%s" Wb_5_var	)
+	fscanf(fin "\n%s" Wb_6_var	)
+	fscanf(fin "\n%s" Wb_7_var	)
+	fscanf(fin "\n%s" Wb_8_var	)
+	fscanf(fin "\n%s" Wb_9_var	)
+	fscanf(fin "\n%s" Wb_10_var	)
+	fscanf(fin "\n%s" Wb_11_var	)
+	fscanf(fin "\n%s" Wb_12_var	)
+	fscanf(fin "\n%s" Wb_13_var	)
+	fscanf(fin "\n%s" Wb_14_var	)
+	fscanf(fin "\n%s" Wb_15_var	)
+	fscanf(fin "\n%s" Wb_16_var	)
+	fscanf(fin "\n%s" Wb_17_var	)
+	fscanf(fin "\n%s" Wb_18_var	)
+	fscanf(fin "\n%s" Wb_19_var	)
+	fscanf(fin "\n%s" Wb_20_var	)
+	fscanf(fin "\n%s" Wc_d_1_var	)
+	fscanf(fin "\n%s" Wc_d_2_var	)
+	fscanf(fin "\n%s" Wc_d_3_var	)
+	fscanf(fin "\n%s" Wc_d_4_var	)
+	fscanf(fin "\n%s" Wc_d_5_var	)
+	fscanf(fin "\n%s" Wc_d_6_var	)
+	fscanf(fin "\n%s" Wc_d_7_var	)
+	fscanf(fin "\n%s" Wc_d_8_var	)
+	fscanf(fin "\n%s" Wc_d_9_var	)
+	fscanf(fin "\n%s" Wc_d_10_var	)
+	fscanf(fin "\n%s" Wc_d_11_var	)
+	fscanf(fin "\n%s" Wc_d_12_var	)
+	fscanf(fin "\n%s" Wc_d_13_var	)
+	fscanf(fin "\n%s" Wc_d_14_var	)
+	fscanf(fin "\n%s" Wc_d_15_var	)
+	fscanf(fin "\n%s" Wc_d_16_var	)
+	fscanf(fin "\n%s" Wc_d_17_var	)
+	fscanf(fin "\n%s" Wc_d_18_var	)
+	fscanf(fin "\n%s" Wc_d_19_var	)
+	fscanf(fin "\n%s" Wc_d_20_var	)
+	fscanf(fin "\n%s" We_1_var	)
+	fscanf(fin "\n%s" We_2_var	)
+	fscanf(fin "\n%s" We_3_var	)
+	fscanf(fin "\n%s" We_4_var	)
+	fscanf(fin "\n%s" We_5_var	)
+	fscanf(fin "\n%s" We_6_var	)
+	fscanf(fin "\n%s" We_7_var	)
+	fscanf(fin "\n%s" We_8_var	)
+	fscanf(fin "\n%s" We_9_var	)
+	fscanf(fin "\n%s" We_10_var	)
+	fscanf(fin "\n%s" We_11_var	)
+	fscanf(fin "\n%s" We_12_var	)
+	fscanf(fin "\n%s" We_13_var	)
+	fscanf(fin "\n%s" We_14_var	)
+	fscanf(fin "\n%s" We_15_var	)
+	fscanf(fin "\n%s" We_16_var	)
+	fscanf(fin "\n%s" We_17_var	)
+	fscanf(fin "\n%s" We_18_var	)
+	fscanf(fin "\n%s" We_19_var	)
+	fscanf(fin "\n%s" We_20_var	)
+	fscanf(fin "\n%s" Wf_1_var	)
+	fscanf(fin "\n%s" Wf_2_var	)
+	fscanf(fin "\n%s" Wf_3_var	)
+	fscanf(fin "\n%s" Wf_4_var	)
+	fscanf(fin "\n%s" Wf_5_var	)
+	fscanf(fin "\n%s" Wf_6_var	)
+	fscanf(fin "\n%s" Wf_7_var	)
+	fscanf(fin "\n%s" Wf_8_var	)
+	fscanf(fin "\n%s" Wf_9_var	)
+	fscanf(fin "\n%s" Wf_10_var	)
+	fscanf(fin "\n%s" Wf_11_var	)
+	fscanf(fin "\n%s" Wf_12_var	)
+	fscanf(fin "\n%s" Wf_13_var	)
+	fscanf(fin "\n%s" Wf_14_var	)
+	fscanf(fin "\n%s" Wf_15_var	)
+	fscanf(fin "\n%s" Wf_16_var	)
+	fscanf(fin "\n%s" Wf_17_var	)
+	fscanf(fin "\n%s" Wf_18_var	)
+	fscanf(fin "\n%s" Wf_19_var	)
+	fscanf(fin "\n%s" Wf_20_var	)
+	fscanf(fin "\n%s" I5_var	)
+	fscanf(fin "\n%s" Cc_var	)
+	fscanf(fin "\n%s" CL_var	)
+	fscanf(fin "\n%s" Vcm_var	)
+	fscanf(fin "\n%s" Vdd_var	)
+
+	close(fin)
+)
+	
+(procedure chay()	
+	analysis('ac ?start "1"  ?stop "1G"  ?dec "80"  )
+	analysis('dc ?saveOppoint t  )
+
+	desVar(	  "Cc" 		Cc_var	)
+	desVar(	  "CL" 		CL_var	)
+	desVar(	  "I5" 		I5_var	)
+	desVar(	  "Vcm" 	Vcm_var	)
+	desVar(	  "Vdd" 	Vdd_var	)
+	desVar(	  "Wa_1" 	Wa_1_var	)
+	desVar(	  "Wa_2" 	Wa_2_var	)
+	desVar(	  "Wa_3" 	Wa_3_var	)
+	desVar(	  "Wa_4" 	Wa_4_var	)
+	desVar(	  "Wa_5" 	Wa_5_var	)
+	desVar(	  "Wa_6" 	Wa_6_var	)
+	desVar(	  "Wa_7" 	Wa_7_var	)
+	desVar(	  "Wa_8" 	Wa_8_var	)
+	desVar(	  "Wa_9" 	Wa_9_var	)
+	desVar(	  "Wa_10" 	Wa_10_var	)
+	desVar(	  "Wa_11" 	Wa_11_var	)
+	desVar(	  "Wa_12" 	Wa_12_var	)
+	desVar(	  "Wa_13" 	Wa_13_var	)
+	desVar(	  "Wa_14" 	Wa_14_var	)
+	desVar(	  "Wa_15" 	Wa_15_var	)
+	desVar(	  "Wa_16" 	Wa_16_var	)
+	desVar(	  "Wa_17" 	Wa_17_var	)
+	desVar(	  "Wa_18" 	Wa_18_var	)
+	desVar(	  "Wa_19" 	Wa_19_var	)
+	desVar(	  "Wa_20" 	Wa_20_var	)
+	desVar(	  "Wb_1" 	Wb_1_var	)
+	desVar(	  "Wb_2" 	Wb_2_var	)
+	desVar(	  "Wb_3" 	Wb_3_var	)
+	desVar(	  "Wb_4" 	Wb_4_var	)
+	desVar(	  "Wb_5" 	Wb_5_var	)
+	desVar(	  "Wb_6" 	Wb_6_var	)
+	desVar(	  "Wb_7" 	Wb_7_var	)
+	desVar(	  "Wb_8" 	Wb_8_var	)
+	desVar(	  "Wb_9" 	Wb_9_var	)
+	desVar(	  "Wb_10" 	Wb_10_var	)
+	desVar(	  "Wb_11" 	Wb_11_var	)
+	desVar(	  "Wb_12" 	Wb_12_var	)
+	desVar(	  "Wb_13" 	Wb_13_var	)
+	desVar(	  "Wb_14" 	Wb_14_var	)
+	desVar(	  "Wb_15" 	Wb_15_var	)
+	desVar(	  "Wb_16" 	Wb_16_var	)
+	desVar(	  "Wb_17" 	Wb_17_var	)
+	desVar(	  "Wb_18" 	Wb_18_var	)
+	desVar(	  "Wb_19" 	Wb_19_var	)
+	desVar(	  "Wb_20" 	Wb_20_var	)
+	desVar(	  "Wc_d_1" 	Wc_d_1_var	)
+	desVar(	  "Wc_d_2" 	Wc_d_2_var	)
+	desVar(	  "Wc_d_3" 	Wc_d_3_var	)
+	desVar(	  "Wc_d_4" 	Wc_d_4_var	)
+	desVar(	  "Wc_d_5" 	Wc_d_5_var	)
+	desVar(	  "Wc_d_6" 	Wc_d_6_var	)
+	desVar(	  "Wc_d_7" 	Wc_d_7_var	)
+	desVar(	  "Wc_d_8" 	Wc_d_8_var	)
+	desVar(	  "Wc_d_9" 	Wc_d_9_var	)
+	desVar(	  "Wc_d_10" 	Wc_d_10_var	)
+	desVar(	  "Wc_d_11" 	Wc_d_11_var	)
+	desVar(	  "Wc_d_12" 	Wc_d_12_var	)
+	desVar(	  "Wc_d_13" 	Wc_d_13_var	)
+	desVar(	  "Wc_d_14" 	Wc_d_14_var	)
+	desVar(	  "Wc_d_15" 	Wc_d_15_var	)
+	desVar(	  "Wc_d_16" 	Wc_d_16_var	)
+	desVar(	  "Wc_d_17" 	Wc_d_17_var	)
+	desVar(	  "Wc_d_18" 	Wc_d_18_var	)
+	desVar(	  "Wc_d_19" 	Wc_d_19_var	)
+	desVar(	  "Wc_d_20" 	Wc_d_20_var	)
+	desVar(	  "We_1" 	We_1_var	)
+	desVar(	  "We_2" 	We_2_var	)
+	desVar(	  "We_3" 	We_3_var	)
+	desVar(	  "We_4" 	We_4_var	)
+	desVar(	  "We_5" 	We_5_var	)
+	desVar(	  "We_6" 	We_6_var	)
+	desVar(	  "We_7" 	We_7_var	)
+	desVar(	  "We_8" 	We_8_var	)
+	desVar(	  "We_9" 	We_9_var	)
+	desVar(	  "We_10" 	We_10_var	)
+	desVar(	  "We_11" 	We_11_var	)
+	desVar(	  "We_12" 	We_12_var	)
+	desVar(	  "We_13" 	We_13_var	)
+	desVar(	  "We_14" 	We_14_var	)
+	desVar(	  "We_15" 	We_15_var	)
+	desVar(	  "We_16" 	We_16_var	)
+	desVar(	  "We_17" 	We_17_var	)
+	desVar(	  "We_18" 	We_18_var	)
+	desVar(	  "We_19" 	We_19_var	)
+	desVar(	  "We_20" 	We_20_var	)
+	desVar(	  "Wf_1" 	Wf_1_var	)
+	desVar(	  "Wf_2" 	Wf_2_var	)
+	desVar(	  "Wf_3" 	Wf_3_var	)
+	desVar(	  "Wf_4" 	Wf_4_var	)
+	desVar(	  "Wf_5" 	Wf_5_var	)
+	desVar(	  "Wf_6" 	Wf_6_var	)
+	desVar(	  "Wf_7" 	Wf_7_var	)
+	desVar(	  "Wf_8" 	Wf_8_var	)
+	desVar(	  "Wf_9" 	Wf_9_var	)
+	desVar(	  "Wf_10" 	Wf_10_var	)
+	desVar(	  "Wf_11" 	Wf_11_var	)
+	desVar(	  "Wf_12" 	Wf_12_var	)
+	desVar(	  "Wf_13" 	Wf_13_var	)
+	desVar(	  "Wf_14" 	Wf_14_var	)
+	desVar(	  "Wf_15" 	Wf_15_var	)
+	desVar(	  "Wf_16" 	Wf_16_var	)
+	desVar(	  "Wf_17" 	Wf_17_var	)
+	desVar(	  "Wf_18" 	Wf_18_var	)
+	desVar(	  "Wf_19" 	Wf_19_var	)
+	desVar(	  "Wf_20" 	Wf_20_var	)
+
+	envOption(
+		'analysisOrder  list("ac" "dc") 
+	)
+
+	save( 'i "/Out1" "/Out2" "/Out3" "/Out4" "/Out5" "/Out6" "/Out7" "/Out8" "/Out9" "/Out10"
+		"/Out11" "/Out12" "/Out13" "/Out14" "/Out15" "/Out16" "/Out17" "/Out18" "/Out19" "/Out20")
+	
+
+	temp( 27 ) 
+	run()
+	selectResult( 'dc )
+
+	;;Tinh toan
+	;;-----------------
+	;; 
+	;;Individial 1st
+	GBW_1 = cross(dB20((VF("/Out1") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_1 = phaseMargin(VF("/Out1"))
+	Gain_1 = value(dB20((VF("/Out1") / VF("/IN1"))) 100)
+
+	;; Individial 2nd
+	GBW_2 = cross(dB20((VF("/Out1") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_2 = phaseMargin(VF("/Out1"))
+	Gain_2 = value(dB20((VF("/Out1") / VF("/IN1"))) 100)
+
+	;; Individial 3rd
+	GBW_3 = cross(dB20((VF("/Out3") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_3 = phaseMargin(VF("/Out3"))
+	Gain_3 = value(dB20((VF("/Out3") / VF("/IN1"))) 100)
+
+	;; Individial 4th
+	GBW_4 = cross(dB20((VF("/Out4") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_4 = phaseMargin(VF("/Out4"))
+	Gain_4 = value(dB20((VF("/Out4") / VF("/IN1"))) 100)
+	
+	;; Individial 5th
+	GBW_5 = cross(dB20((VF("/Out5") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_5 = phaseMargin(VF("/Out5"))
+	Gain_5 = value(dB20((VF("/Out5") / VF("/IN1"))) 100)
+
+	;; Individial 6th
+	GBW_6 = cross(dB20((VF("/Out6") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_6 = phaseMargin(VF("/Out6"))
+	Gain_6 = value(dB20((VF("/Out6") / VF("/IN1"))) 100)
+
+	;; Individial 7th
+	GBW_7 = cross(dB20((VF("/Out7") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_7 = phaseMargin(VF("/Out7"))
+	Gain_7 = value(dB20((VF("/Out7") / VF("/IN1"))) 100)
+
+	;; Individial 8th
+	GBW_8 = cross(dB20((VF("/Out8") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_8 = phaseMargin(VF("/Out8"))
+	Gain_8 = value(dB20((VF("/Out8") / VF("/IN1"))) 100)
+
+	;; Individial 9th
+	GBW_9 = cross(dB20((VF("/Out9") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_9 = phaseMargin(VF("/Out9"))
+	Gain_9 = value(dB20((VF("/Out9") / VF("/IN1"))) 100)
+
+	;; Individial 10th
+	GBW_10 = cross(dB20((VF("/Out10") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_10 = phaseMargin(VF("/Out10"))
+	Gain_10 = value(dB20((VF("/Out10") / VF("/IN1"))) 100)
+
+	;; Individial 11th
+	GBW_11 = cross(dB20((VF("/Out11") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_11 = phaseMargin(VF("/Out11"))
+	Gain_11 = value(dB20((VF("/Out11") / VF("/IN1"))) 100)
+
+	;; Individial 12th
+	GBW_12 = cross(dB20((VF("/Out1") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_12 = phaseMargin(VF("/Out1"))
+	Gain_12 = value(dB20((VF("/Out1") / VF("/IN1"))) 100)
+
+	;; Individial 13th
+	GBW_13 = cross(dB20((VF("/Out13") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_13 = phaseMargin(VF("/Out13"))
+	Gain_13 = value(dB20((VF("/Out13") / VF("/IN1"))) 100)
+
+	;; Individial 14th
+	GBW_4 = cross(dB20((VF("/Out14") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_4 = phaseMargin(VF("/Out14"))
+	Gain_4 = value(dB20((VF("/Out14") / VF("/IN1"))) 100)
+	
+	;; Individial 15th
+	GBW_15 = cross(dB20((VF("/Out15") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_15 = phaseMargin(VF("/Out15"))
+	Gain_15 = value(dB20((VF("/Out15") / VF("/IN1"))) 100)
+
+	;; Individial 16th
+	GBW_16 = cross(dB20((VF("/Out16") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_16 = phaseMargin(VF("/Out16"))
+	Gain_16 = value(dB20((VF("/Out16") / VF("/IN1"))) 100)
+
+	;; Individial 17th
+	GBW_17 = cross(dB20((VF("/Out17") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_17 = phaseMargin(VF("/Out17"))
+	Gain_17 = value(dB20((VF("/Out17") / VF("/IN1"))) 100)
+
+	;; Individial 18th
+	GBW_18 = cross(dB20((VF("/Out18") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_18 = phaseMargin(VF("/Out18"))
+	Gain_18 = value(dB20((VF("/Out18") / VF("/IN1"))) 100)
+
+	;; Individial 19th
+	GBW_19 = cross(dB20((VF("/Out19") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_19 = phaseMargin(VF("/Out19"))
+	Gain_19 = value(dB20((VF("/Out19") / VF("/IN1"))) 100)
+
+	;; Individial 20th
+	GBW_20 = cross(dB20((VF("/Out20") / VF("/IN1"))) 0 1 "either" nil nil)
+	PM_20 = phaseMargin(VF("/Out20"))
+	Gain_20 = value(dB20((VF("/Out20") / VF("/IN1"))) 100)
+
+
+	;; XUAT KET QUA TINH TOAN
+	;; ---------------------------------------
+	fileketqua=outfile("./FoM_result.txt")
+		fprintf(fileketqua "%f/r" Gain_1)
+		fprintf(fileketqua "%f/r" GBW_1)
+		fprintf(fileketqua "%f/r" PM_1)
+		
+		fprintf(fileketqua "%f/r" Gain_2)
+		fprintf(fileketqua "%f/r" GBW_2)
+		fprintf(fileketqua "%f/r" PM_2)
+
+		fprintf(fileketqua "%f/r" Gain_3)
+		fprintf(fileketqua "%f/r" GBW_3)
+		fprintf(fileketqua "%f/r" PM_3)
+		
+		fprintf(fileketqua "%f/r" Gain_4)
+		fprintf(fileketqua "%f/r" GBW_4)
+		fprintf(fileketqua "%f/r" PM_4)
+		
+		fprintf(fileketqua "%f/r" Gain_5)
+		fprintf(fileketqua "%f/r" GBW_5)
+		fprintf(fileketqua "%f/r" PM_5)
+
+		fprintf(fileketqua "%f/r" Gain_6)
+		fprintf(fileketqua "%f/r" GBW_6)
+		fprintf(fileketqua "%f/r" PM_6)
+
+		fprintf(fileketqua "%f/r" Gain_7)
+		fprintf(fileketqua "%f/r" GBW_7)
+		fprintf(fileketqua "%f/r" PM_7)
+		
+		fprintf(fileketqua "%f/r" Gain_8)
+		fprintf(fileketqua "%f/r" GBW_8)
+		fprintf(fileketqua "%f/r" PM_8)
+
+		fprintf(fileketqua "%f/r" Gain_9)
+		fprintf(fileketqua "%f/r" GBW_9)
+		fprintf(fileketqua "%f/r" PM_9)
+
+		fprintf(fileketqua "%f/r" Gain_10)
+		fprintf(fileketqua "%f/r" GBW_10)
+		fprintf(fileketqua "%f/r" PM_10)
+
+		fprintf(fileketqua "%f/r" Gain_11)
+		fprintf(fileketqua "%f/r" GBW_11)
+		fprintf(fileketqua "%f/r" PM_11)
+		
+		fprintf(fileketqua "%f/r" Gain_12)
+		fprintf(fileketqua "%f/r" GBW_12)
+		fprintf(fileketqua "%f/r" PM_12)
+
+		fprintf(fileketqua "%f/r" Gain_13)
+		fprintf(fileketqua "%f/r" GBW_13)
+		fprintf(fileketqua "%f/r" PM_13)
+		
+		fprintf(fileketqua "%f/r" Gain_14)
+		fprintf(fileketqua "%f/r" GBW_14)
+		fprintf(fileketqua "%f/r" PM_14)
+		
+		fprintf(fileketqua "%f/r" Gain_15)
+		fprintf(fileketqua "%f/r" GBW_15)
+		fprintf(fileketqua "%f/r" PM_15)
+
+		fprintf(fileketqua "%f/r" Gain_16)
+		fprintf(fileketqua "%f/r" GBW_16)
+		fprintf(fileketqua "%f/r" PM_16)
+
+		fprintf(fileketqua "%f/r" Gain_17)
+		fprintf(fileketqua "%f/r" GBW_17)
+		fprintf(fileketqua "%f/r" PM_17)
+		
+		fprintf(fileketqua "%f/r" Gain_18)
+		fprintf(fileketqua "%f/r" GBW_18)
+		fprintf(fileketqua "%f/r" PM_18)
+
+		fprintf(fileketqua "%f/r" Gain_19)
+		fprintf(fileketqua "%f/r" GBW_19)
+		fprintf(fileketqua "%f/r" PM_19)
+
+		fprintf(fileketqua "%f/r" Gain_20)
+		fprintf(fileketqua "%f/r" GBW_20)
+		fprintf(fileketqua "%f/r" PM_20)
+	close(fileketqua)
+
+	;; Phía dưới là một “block comment”, hãy xóa dấu /* */ để có thể quan sát dạng sóng ở chế độ DC
+	;; Bên cạnh đó, hãy thêm ;; vào trước lệnh “exit” ở cuối chương trình để OCEAN không tự động thoát ra sau khi đã mô phỏng xong
+	/*
+	plot( GBW_1 ?expr '( "GBW_1" ) )
+
+	plot( PM_1 ?expr '( "PM_1" ) )
+
+	plot( Gain_1 ?expr '( "Gain_1" ) )
+	*/
+)
+
+khoitao()
+chay()
+;;exit
