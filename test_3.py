@@ -11,6 +11,8 @@ import math
 
 
 def calFitness(sol,particles, n_requirement):
+    
+    print("Array : ",sol)
 
     w01_1 = sol[0,0] * u
     w01_2 = sol[1,0] * u
@@ -184,7 +186,7 @@ def calFitness(sol,particles, n_requirement):
 
 
     ### Attach parameters to OCEAN File ### 
-    filethongso = ("./APSO_params_opamp.txt") 
+    filethongso = ("./APSO_params_opamp.txt")
     f = open(filethongso, 'w')
 
     f.write(  "%s"   %w01_1            )
@@ -373,19 +375,19 @@ def calFitness(sol,particles, n_requirement):
         param = param.astype(float)  # Chuyển đổi dữ liệu từ dạng chuỗi sang float
         param_result[:len(param)] = param.reshape(particles, n_requirement)  # Gán dữ liệu từ param vào param_result
 
-    Cond = np.zeros(particles)
-    PM = np.zeros(particles)
-    Gain = np.zeros(particles)
-    GBW = np.zeros(particles)
-    Power = np.zeros(particles)
-    Itotal = np.zeros(particles)
-    CMRR = np.zeros(particles)
-    PSRR_n = np.zeros(particles)
-    PSRR_p = np.zeros(particles)
-    SR = np.zeros(particles)
+    Cond = np.zeros(particles).astype(float)
+    PM = np.zeros(particles).astype(float)
+    Gain = np.zeros(particles).astype(float)
+    GBW = np.zeros(particles).astype(float)
+    Power = np.zeros(particles).astype(float)
+    Itotal = np.zeros(particles).astype(float)
+    CMRR = np.zeros(particles).astype(float)
+    PSRR_n = np.zeros(particles).astype(float)
+    PSRR_p = np.zeros(particles).astype(float)
+    SR = np.zeros(particles).astype(float)
     Tan_60 = math.tan(math.radians(60))
     Cload = 1 * 1e-12
-    fitness = np.zeros(particles)
+    fitness = np.zeros(particles).astype(float)
 
     for i in range(particles):
         Cond[i] = param_result[i,0]
@@ -403,7 +405,7 @@ def calFitness(sol,particles, n_requirement):
     for i in range(particles):
         if Cond[i] == 0:
             fitness[i] = -1
-        elif ( (PM[i] < 60.0) | (Gain[i] < 50.0) | (GBW[i] < 2.5) | (Power[i] > 250.0) | (CMRR[i] < 50) | (PSRR_p[i] < 50) | (SR[i] < 1.2) ):
+        elif ( (PM[i] < 60.0) | (Gain[i] < 50.0) | (GBW[i] < 50) | (Power[i] > 250.0) | (CMRR[i] < 50) | (PSRR_p[i] < 50) | (SR[i] < 50) ):
             fitness[i] = 0
         else: 
             fitness[i] =  ((GBW[i] * 10e6 * Cload) * (PM[i]/Tan_60))/(Itotal[i] * 10e-6)
@@ -523,8 +525,8 @@ if __name__ == "__main__":
     n_dimensions = 10 # Số lượng biến
     n_iter = 10
     n_requirement = 9
-    u = 10e-6
-    p = 10e-12
+    u = 1e-6
+    p = 1e-12
     
     column_names = ["Lan chay", "Begin", "End", "Time (s)", "Fitness", "Condition", "W01 (um)", "L01 (um)", "W23 (um)", "L23 (um)" \
                     , "W47 (um)", "W5 (um)","L457 (um)", "W6 (um)", "L6 (um)", "Cc (pF)","PM (degree)", "DC Gain (dB)", "CMRR (dB)", "GBW (MHz)" \
