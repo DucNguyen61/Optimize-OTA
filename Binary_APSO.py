@@ -401,15 +401,13 @@ def calFitness(sol,particles, n_requirement):
         SR[i] = param_result[i,8] 
         Itotal[i] = Power[i]/1.2
 
-
-    for i in range(particles):
         if Cond[i] == 0:
             fitness[i] = -1
-        elif ( (PM[i] < 60.0) | (Gain[i] < 50.0) | (GBW[i] < 50) | (Power[i] > 250.0) | (CMRR[i] < 50) | (PSRR_p[i] < 50) | (SR[i] < 50) ):
+        elif ( (PM[i] < 60.0) | (Gain[i] < 50.0) | (GBW[i] < 50) | (Power[i] > 250.0) | (CMRR[i] < 50) | (PSRR_p[i] < 50) | (SR[i] < 30) ):
             fitness[i] = 0
         else: 
             fitness[i] =  ((GBW[i] * 10e6 * Cload) * (PM[i]/Tan_60))/(Itotal[i] * 10e-6)
-        
+
     return fitness,param_result
 
 
@@ -428,7 +426,7 @@ def create_folder_path():
 
 class Particle:
     def __init__(self, bounds, n_particles, n_dimensions):
-        self.position = np.random.uniform(bounds[:,0],bounds[:,1] , size=(n_particles, n_dimensions))
+        self.position = np.random.uniform(bounds[:, 0], bounds[:, 1], size=(n_particles, n_dimensions))
         self.velocity = np.random.uniform(-1, 1, size=(n_particles, n_dimensions))
         self.best_position = self.position.copy()
         self.fitness = -float('inf')
@@ -480,6 +478,7 @@ def pso(bounds, n_particles, n_dimensions ,n_requirement, n_iter, df):
             particle.position = update_position(particle, bounds)
 
         results_xlsx = np.zeros(n_requirement)
+        print("Array requiriment :",results_xlsx)
         print("global_best_fitness: (",i,") :", global_best_fitness)
         max_row_index = np.argmax(particle.A_fitness)
         global_best_chrom_params = particle.position[max_row_index]
@@ -492,7 +491,8 @@ def pso(bounds, n_particles, n_dimensions ,n_requirement, n_iter, df):
                 "Begin": begin_time,
                 "End": dt.datetime.now().strftime("%H:%M:%S"),
                 "Time (s)" : (dt.datetime.strptime(dt.datetime.now().strftime("%H:%M:%S"),'%H:%M:%S') - dt.datetime.strptime(begin_time, '%H:%M:%S')).total_seconds(),
-                "Fitness"  : global_best_fitness,
+                "Global Best Fitness"  : global_best_fitness,
+                "Fitness" : np.max(particle.A_fitness),
                 "Condition" : results_xlsx[0],
                 "W01 (um)"  : global_best_chrom_params[0],
                 "L01 (um)"  : global_best_chrom_params[1],
@@ -523,12 +523,12 @@ if __name__ == "__main__":
     bounds = np.array([(0.85, 4), (0.23, 0.4), (0.7, 1), (0.06, 0.4), (2, 2.8), (18, 23), (0.1, 1), (16, 22), (0.25, 0.5), (0.3, 1)])  # Giới hạn cho từng biến
     n_particles = 16  # Số lượng hạt trong quần thể
     n_dimensions = 10 # Số lượng biến
-    n_iter = 10
+    n_iter = 5
     n_requirement = 9
     u = 1e-6
     p = 1e-12
     
-    column_names = ["Lan chay", "Begin", "End", "Time (s)", "Fitness", "Condition", "W01 (um)", "L01 (um)", "W23 (um)", "L23 (um)" \
+    column_names = ["Lan chay", "Begin", "End", "Time (s)","Global Best Fitness", "Fitness", "Condition", "W01 (um)", "L01 (um)", "W23 (um)", "L23 (um)" \
                     , "W47 (um)", "W5 (um)","L457 (um)", "W6 (um)", "L6 (um)", "Cc (pF)","PM (degree)", "DC Gain (dB)", "CMRR (dB)", "GBW (MHz)" \
                     ,"Power (uW)", "PSRR+ (dB)", "PSRR- (dB)", "Slew Race (V/us)"]
     
@@ -553,7 +553,7 @@ if __name__ == "__main__":
     df.to_csv("./APSO_result.csv")
 
     shutil.copy2("./APSO_results_opamp.txt", path)
-    shutil.copy2("./run.py", path)
+    shutil.copy2("./APSO_opamp.py", path)
     shutil.copy2("./APSO_params_opamp.txt", path)
     shutil.copy2("./APSO_opamp_pop16_iter100.xlsx",path)
     shutil.copy2("./APSO_result.csv",path)

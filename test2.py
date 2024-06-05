@@ -7,7 +7,7 @@ import numpy as np
 import shutil
 def calFitness(position, particles, dimension):
     # Đây chỉ là một hàm giả định, bạn cần thay thế bằng hàm tính toán fitness thực tế của mình
-
+    print("position " ,position)
     fitness = np.zeros(particles)
 
     fitness = np.sum(position,axis=1)
@@ -31,7 +31,17 @@ def create_folder_path():
 
 class Particle:
     def __init__(self, bounds, n_particles, n_dimensions):
-        self.position = np.random.uniform(bounds[:,0],bounds[:,1] , size=(n_particles, n_dimensions))
+        self.fisrt_param_result = np.zeros((n_particles, n_dimensions))
+        with open("./APSO_first_param.txt") as f2:
+            fisrt_param = f2.readlines()
+            fisrt_param = np.array(fisrt_param)
+            for i in range(n_particles):
+                for j in range(n_dimensions):
+                    self.fisrt_param_result[i,j] = fisrt_param[i + j*n_particles] 
+
+
+
+        self.position = self.fisrt_param_result
         self.velocity = np.random.uniform(-1, 1, size=(n_particles, n_dimensions))
         self.best_position = self.position.copy()
         self.fitness = float('inf')
@@ -102,9 +112,9 @@ def pso(bounds, n_particles, n_dimensions , n_iter, df):
 # Chạy thử với các tham số tùy chọn
 if __name__ == "__main__":
     bounds = np.array([(0.85, 4), (0.23, 0.4), (0.7, 1)])  # Phạm vi của các biến
-    n_particles = 8  # Số lượng hạt trong quần thể
+    n_particles = 16  # Số lượng hạt trong quần thể
     n_dimensions = 3  # Số lượng biến
-    n_iter = 100
+    n_iter = 10
 
     
     column_names = ["Lan chay", "Begin", "End", "Time (s)", "Fitness", "W01 (um)", "L01 (um)", "C01 (um)"]
