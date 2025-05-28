@@ -10,9 +10,10 @@ import shutil
 import math
 
 
-def calFitness(sol,particles, n_requirement):
+def calFitness(sol,particles, n_requirement): 
     
-    print("Array : ",sol)
+    #Gán các giá trị cho các biến của opamp
+    print("Array : ",sol) 
 
     w01_1 = sol[0,0] * u
     w01_2 = sol[1,0] * u
@@ -401,89 +402,118 @@ def calFitness(sol,particles, n_requirement):
         SR[i] = param_result[i,8] 
         Itotal[i] = Power[i]/1.2
 
-        if Cond[i] == 0:
+        if Cond[i] == 0:#Khi Opamp không đạt SAT (Condition = 0) thì sẽ trả về hàm mục tiêu fitness = -1
             fitness[i] = -1
-        elif ( (PM[i] < 60.0) | (Gain[i] < 50.0) | (GBW[i] < 50) | (Power[i] > 250.0) | (CMRR[i] < 50) | (PSRR_p[i] < 50) | (SR[i] < 30) ):
-            fitness[i] = 0
-        else: 
-            fitness[i] =  ((GBW[i] * 10e6 * Cload) * (PM[i]/Tan_60))/(Itotal[i] * 10e-6)
+        elif ( (PM[i] < 60.0) | (Gain[i] < 50.0) | (GBW[i] < 50) | (Power[i] > 250.0) | (CMRR[i] < 50) | (PSRR_p[i] < 50) | (PSRR_n[i] < 120) | (SR[i] < 50) ):
+            fitness[i] = 0 #Khi Opamp đã SAT ta so sánh các giá trị ràng buộc, nếu không thỏa tất cả ràng buộc thì hàm mục tiêu fitness = 0
+        else: #Khi Opamp đã Sat và pass các ràng buộc thì hàm mục tiêu fitness sẽ tính theo công thức đã cho
+            fitness[i] =  ((GBW[i] *10e6 * Cload) * (math.tan(math.radians(PM[i]))/Tan_60))/(Itotal[i]*10e-6)
 
     return fitness,param_result
 
+def sigmoid(x): #hàm signoid trong công thức cảu Binary PSO 
+    return 1 / (1 + np.exp(-x))
 
-def create_folder_path():
+def decode(bounds, n_bits, bitstring): #đứa giá trị nhi phân thành giá trị thập phân
+    decoded = list()
+    largest = 2 ** n_bits - 1  # Correct the largest value calculation
+    for i in range(len(bounds)):
+        start, end = i * n_bits, (i * n_bits) + n_bits
+        substring = bitstring[start:end]
+        chars = ''.join([str(s) for s in substring])
+        integer = int(chars, 2)
+        value = bounds[i][0] + (integer / largest) * (bounds[i][1] - bounds[i][0])
+        value_rounded = np.round(value, 2)
+        decoded.append(value_rounded)
+    return decoded
+
+def create_folder_path(g, b, result):
     # Gets the current date in the format DD-MM-YYYY
     now = dt.date.today()
     month = now.strftime("%b")
     day = now.strftime("%d")
     year = now.strftime("%Y")
-    formatted_date = f"{day}-{month}-{year}"
+     # Đặt tên file theo thời gian hiện tại DD-MM-YY và các giá trị khai báo và kết quả fitness + tên giải thuật
+    formatted_date = f"{day}-{month}-{year}-gamma={g}-beta={b}-result={result:.2f}"
     # Join two paths together
     path1 = os.getcwd()
     path2 = formatted_date
-    joined_path = os.path.join(path1,path2)
+    joined_path = os.path.join(path1, path2)
     return joined_path
 
-class Particle:
-    def __init__(self, bounds, n_particles, n_dimensions):
-        self.position = np.random.uniform(bounds[:, 0], bounds[:, 1], size=(n_particles, n_dimensions))
-        self.velocity = np.random.uniform(-1, 1, size=(n_particles, n_dimensions))
+class Particle:#function khai báo giá trị đầu tiên của quần thể
+    def __init__(self, n_bits, n_particles, n_dimensions, position_file):
+         #khởi tạo vị trí ban đầu (ở đây là lấy các giá trị ở trong 1 file .txt được khai báo bên dưới và bình thưởng vị trí ban đầu sẽ ramdom trong bound)
+        self.position = self.read_positions_from_file(position_file, n_particles, n_bits * n_dimensions)
+        self.velocity = np.random.uniform(-1, 1, size=(n_particles, n_bits * n_dimensions))
         self.best_position = self.position.copy()
         self.fitness = -float('inf')
         self.best_fitness = -float('inf')
         self.A_fitness = np.zeros(n_particles)
 
+    def read_positions_from_file(self, position_file, n_particles, n_dimensions): #đọc fie .txt có giá trị nhị phân cho vị trí ban đầu
+        positions = np.zeros((n_particles, n_dimensions), dtype=int)
+        with open(position_file, 'r') as file:
+            for i, line in enumerate(file):
+                if i >= n_particles:
+                    break
+                positions[i] = np.array([int(x) for x in line.split()])
+        return positions
 
-def update_velocity(particle, global_best_position , n_iter):
-    Epsilon = np.random.rand()
-    Gamma = 0.7
-    Ampha = Gamma**n_iter
-    Beta = 0.5
-
+def update_velocity(particle, global_best_position , n_iter):# Cập nhật vận tốc và vị trí của các hạt
+    #khai báo các hằng số gia tốc ampha, beta , gamma cho thuật toán
+    Epsilon = np.random.rand(*particle.position.shape)
+    Gamma = 0.5
+    Ampha0 = 1
+    Ampha = Ampha0*(Gamma**n_iter)
+    Beta = 0.3
+    # Tính toán vận tốc mới
     velocity = particle.velocity + Beta * (global_best_position - particle.position) + Ampha*Epsilon
 
     return velocity
 
-def update_position(particle, bounds):
-    new_position = particle.position + particle.velocity
-    new_position = np.clip(new_position, bounds[:, 0], bounds[:, 1])
+def update_position(particle): # Cập nhật vị trí mới theo vị trí tốt nhất
+    probabilities = sigmoid(particle.velocity) #tính vị trị mới theo công thứ Signiod
+    new_position = np.where(np.random.rand(*probabilities.shape) < probabilities, 1, 0)
 
     return new_position
     
-def pso(bounds, n_particles, n_dimensions ,n_requirement, n_iter, df):
-
-    particles = [Particle(bounds, n_particles, n_dimensions) for _ in range(1)]
+def pso(bounds, n_particles, n_bits, n_dimensions ,n_requirement, n_iter, df):
+    #Khởi tạo vị trí và vận tốc ban đầu cho các hạt
+    particles = [Particle(n_bits, n_particles, n_dimensions,position_file) for _ in range(1)]
+    #khai bao hàm
     global_best_fitness = -float('inf')
     global_best_position = None
 
-    for i in range(n_iter):
+    for i in range(n_iter):#số lần lặp
         begin_time = dt.datetime.now().strftime("%H:%M:%S")
         for particle in particles:
-            particle.A_fitness,param_result = calFitness(particle.position,n_particles,n_requirement)
+            decoded_positions = np.array([decode(bounds, n_bits, p) for p in particle.position]) #gọi vị trí đầu theo nhị phân qua hàm decoder 
+            particle.A_fitness,param_result = calFitness(decoded_positions,n_particles,n_requirement)
             
-            particle.fitness = np.max(particle.A_fitness)
+            particle.fitness = np.max(particle.A_fitness) #tìm giá trị lớn nhất trong chuỗi fitness
             print("array fitness" ,i, " :",particle.A_fitness)
 
             print("position: ", particle.position)
-            if particle.fitness > particle.best_fitness:
+            if particle.fitness > particle.best_fitness: #Nếu best fitness mới > best fitness cũ thì sẽ thay đổi
                 particle.best_position = particle.position.copy()
                 particle.best_fitness = particle.fitness
             
-            if particle.best_fitness > global_best_fitness:
+            if particle.best_fitness > global_best_fitness:#Gọi cập nhập lại vị trí và vận tốc mới cho vòng lặp tiếp theo
                 global_best_fitness = particle.best_fitness
                 global_best_position = particle.best_position.copy()
         
         for particle in particles:
             particle.velocity = update_velocity(particle, global_best_position , i)
-            particle.position = update_position(particle, bounds)
+            particle.position = update_position(particle)
 
         results_xlsx = np.zeros(n_requirement)
         print("Array requiriment :",results_xlsx)
         print("global_best_fitness: (",i,") :", global_best_fitness)
         max_row_index = np.argmax(particle.A_fitness)
-        global_best_chrom_params = particle.position[max_row_index]
+        global_best_chrom_params = decoded_positions[max_row_index]
         print("global_best_chrom_params: (",i,") :", global_best_chrom_params)
-        for t in range(n_requirement):
+        for t in range(n_requirement): #giá trị được in trong excel
             results_xlsx[t] = param_result[max_row_index,t]
         new_row = [
             {
@@ -520,11 +550,13 @@ def pso(bounds, n_particles, n_dimensions ,n_requirement, n_iter, df):
 
 # Chạy thử với các tham số tùy chọn
 if __name__ == "__main__":
-    bounds = np.array([(0.85, 4), (0.23, 0.4), (0.7, 1), (0.06, 0.4), (2, 2.8), (18, 23), (0.1, 1), (16, 22), (0.25, 0.5), (0.3, 1)])  # Giới hạn cho từng biến
+    bounds = np.array([(0.85, 4), (0.23, 0.4), (0.7, 1), (0.06, 0.4), (2, 2.8), (20, 23), (0.1, 1), (16, 22), (0.25, 0.5), (0.3, 1)])  # Giới hạn cho từng biến
+    position_file = 'Binary_APSO_first_params.txt'
+    n_bits = 16 #số bit
     n_particles = 16  # Số lượng hạt trong quần thể
     n_dimensions = 10 # Số lượng biến
-    n_iter = 5
-    n_requirement = 9
+    n_iter = 10 #số vòng lặp
+    n_requirement = 9 #số lượng ràng buộc
     u = 1e-6
     p = 1e-12
     
@@ -533,18 +565,21 @@ if __name__ == "__main__":
                     ,"Power (uW)", "PSRR+ (dB)", "PSRR- (dB)", "Slew Race (V/us)"]
     
     df = pd.DataFrame(columns=column_names)
-    positions,Best_fitness,df = pso(bounds, n_particles, n_dimensions,n_requirement,n_iter,df)
+    positions,Best_fitness,df = pso(bounds, n_particles, n_bits, n_dimensions,n_requirement,n_iter,df)
     print('Done!')
     print(df)
 
     print("Best solution:", positions)
     print("Best fitness: ",Best_fitness)
-
-    path = create_folder_path()
+    
+    #giá trị in ra tên file folder cho dễ quan sát
+    g = 0.5
+    b = 0.3
+    path = create_folder_path(g, b, Best_fitness)#tạo thư mục
 
     index = 1
-    while os.path.exists(path):
-        path = f"{create_folder_path()}({index})"
+    while os.path.exists(path): #hàm để các thư mục không bị trùng tên
+        path = f"{create_folder_path(g,b,Best_fitness)}({index})"
         index += 1
     os.mkdir(path)
     # In kết quả tốt nhất
@@ -552,6 +587,7 @@ if __name__ == "__main__":
     df.to_excel("./APSO_opamp_pop16_iter100.xlsx", sheet_name = "APSO_OPAMP", index = False)
     df.to_csv("./APSO_result.csv")
 
+    #Các file copy vào trong thư mục
     shutil.copy2("./APSO_results_opamp.txt", path)
     shutil.copy2("./APSO_opamp.py", path)
     shutil.copy2("./APSO_params_opamp.txt", path)
